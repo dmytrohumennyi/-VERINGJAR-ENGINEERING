@@ -1,0 +1,930 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Væringjar Engineering develops compact aerospace systems, experimental rocket platforms, autonomous vehicles, robotics, electronics, and embedded software." />
+  <meta name="theme-color" content="#07111d" />
+  <title>Væringjar Engineering — Aerospace & Robotics</title>
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <style>
+    :root {
+      --bg: #06101b;
+      --bg-soft: #0a1725;
+      --panel: rgba(13, 28, 43, 0.72);
+      --panel-strong: #102337;
+      --line: rgba(169, 211, 255, 0.16);
+      --text: #f4f8fb;
+      --muted: #9bb0c2;
+      --accent: #77e2c4;
+      --accent-2: #76a9ff;
+      --warning: #ffd37a;
+      --max: 1180px;
+      --radius: 22px;
+      --shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 85% 8%, rgba(118, 169, 255, 0.17), transparent 30%),
+        radial-gradient(circle at 5% 35%, rgba(119, 226, 196, 0.12), transparent 28%),
+        linear-gradient(180deg, #06101b 0%, #081522 48%, #050c14 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255,255,255,0.018) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.018) 1px, transparent 1px);
+      background-size: 34px 34px;
+      mask-image: linear-gradient(to bottom, black 0%, transparent 70%);
+      z-index: -1;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+
+    .shell {
+      width: min(calc(100% - 36px), var(--max));
+      margin-inline: auto;
+    }
+
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(18px);
+      background: rgba(5, 13, 22, 0.72);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .nav {
+      height: 76px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      font-size: 0.92rem;
+      white-space: nowrap;
+    }
+
+    .brand-mark {
+      width: 39px;
+      height: 39px;
+      border: 1px solid rgba(119, 226, 196, 0.55);
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(145deg, rgba(119,226,196,.15), rgba(118,169,255,.08));
+      box-shadow: inset 0 0 24px rgba(119,226,196,.08);
+    }
+
+    .brand-mark svg { width: 24px; height: 24px; }
+
+    .navlinks {
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      color: var(--muted);
+      font-size: 0.92rem;
+    }
+
+    .navlinks a:hover { color: var(--text); }
+
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .lang {
+      color: var(--muted);
+      border: 1px solid var(--line);
+      background: transparent;
+      border-radius: 10px;
+      padding: 9px 11px;
+      cursor: pointer;
+    }
+
+    .lang:hover { color: var(--text); border-color: rgba(119,226,196,.35); }
+
+    .btn {
+      border: 0;
+      cursor: pointer;
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      min-height: 46px;
+      padding: 0 19px;
+      border-radius: 13px;
+      font-weight: 750;
+      transition: transform .2s ease, box-shadow .2s ease, opacity .2s ease;
+    }
+
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      color: #05110e;
+      background: linear-gradient(135deg, #8cf2d4, #63ccb0);
+      box-shadow: 0 14px 36px rgba(83, 208, 174, 0.22);
+    }
+    .btn-secondary {
+      color: var(--text);
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.025);
+    }
+
+    .hero {
+      min-height: calc(100vh - 76px);
+      display: grid;
+      grid-template-columns: 1.05fr .95fr;
+      align-items: center;
+      gap: 56px;
+      padding: 76px 0 78px;
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: #b8c9d8;
+      font-size: .82rem;
+      font-weight: 700;
+      letter-spacing: .11em;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 32px;
+      height: 1px;
+      background: var(--accent);
+      box-shadow: 0 0 13px var(--accent);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3rem, 7vw, 6.4rem);
+      line-height: .93;
+      letter-spacing: -0.065em;
+      max-width: 850px;
+    }
+
+    h1 span {
+      display: block;
+      color: transparent;
+      -webkit-text-stroke: 1px rgba(211, 230, 244, .65);
+    }
+
+    .hero-copy {
+      max-width: 680px;
+      margin: 27px 0 31px;
+      color: var(--muted);
+      font-size: 1.12rem;
+      line-height: 1.75;
+    }
+
+    .hero-actions { display: flex; gap: 13px; flex-wrap: wrap; }
+
+    .trust-row {
+      margin-top: 42px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px 28px;
+      color: #8298aa;
+      font-size: .86rem;
+    }
+
+    .trust-row span {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .trust-row span::before {
+      content: "";
+      width: 7px;
+      height: 7px;
+      border: 1px solid var(--accent);
+      border-radius: 50%;
+      box-shadow: 0 0 8px rgba(119,226,196,.45);
+    }
+
+    .hero-visual {
+      min-height: 560px;
+      position: relative;
+      display: grid;
+      place-items: center;
+    }
+
+    .orbit {
+      width: min(520px, 92vw);
+      aspect-ratio: 1;
+      border: 1px solid rgba(143,190,226,.19);
+      border-radius: 50%;
+      position: relative;
+      animation: float 7s ease-in-out infinite;
+    }
+
+    .orbit::before, .orbit::after {
+      content: "";
+      position: absolute;
+      border-radius: 50%;
+      inset: 12%;
+      border: 1px dashed rgba(119,226,196,.23);
+      transform: rotate(-18deg);
+    }
+
+    .orbit::after {
+      inset: 28%;
+      border-style: solid;
+      border-color: rgba(118,169,255,.18);
+      transform: rotate(36deg);
+    }
+
+    .craft {
+      position: absolute;
+      inset: 12%;
+      display: grid;
+      place-items: center;
+      filter: drop-shadow(0 30px 45px rgba(0,0,0,.38));
+      transform: rotate(-10deg);
+    }
+
+    .craft svg { width: 82%; height: 82%; }
+
+    .metric {
+      position: absolute;
+      min-width: 154px;
+      padding: 14px 15px;
+      border: 1px solid var(--line);
+      background: rgba(8,21,34,.8);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+    }
+
+    .metric strong { display: block; font-size: 1.03rem; }
+    .metric small { color: var(--muted); font-size: .76rem; }
+    .metric.one { top: 9%; right: -2%; }
+    .metric.two { bottom: 14%; left: -5%; }
+
+    .dot {
+      width: 10px; height: 10px;
+      position: absolute;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 24px var(--accent);
+      top: 18%;
+      left: 17%;
+    }
+
+    .section { padding: 104px 0; }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 30px;
+      margin-bottom: 37px;
+    }
+
+    .section h2 {
+      font-size: clamp(2.15rem, 5vw, 4.3rem);
+      line-height: 1.02;
+      letter-spacing: -.045em;
+      margin: 0;
+      max-width: 760px;
+    }
+
+    .section-intro {
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+
+    .card {
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      padding: 27px;
+      background:
+        linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.012)),
+        var(--panel);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.025);
+      position: relative;
+      overflow: hidden;
+      min-height: 290px;
+    }
+
+    .card::after {
+      content: "";
+      position: absolute;
+      width: 145px;
+      height: 145px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(118,169,255,.14), transparent 70%);
+      right: -48px;
+      bottom: -52px;
+    }
+
+    .card-icon {
+      width: 51px;
+      height: 51px;
+      border-radius: 15px;
+      border: 1px solid var(--line);
+      display: grid;
+      place-items: center;
+      background: rgba(255,255,255,.025);
+      margin-bottom: 55px;
+    }
+
+    .card-icon svg { width: 27px; height: 27px; stroke: var(--accent); }
+
+    .card h3 { margin: 0 0 12px; font-size: 1.33rem; }
+    .card p { margin: 0; color: var(--muted); line-height: 1.65; font-size: .94rem; }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+    }
+
+    .product-main {
+      min-height: 500px;
+      padding: 36px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      background:
+        radial-gradient(circle at 72% 20%, rgba(119,226,196,.16), transparent 26%),
+        linear-gradient(145deg, rgba(15,34,52,.96), rgba(8,20,33,.96));
+    }
+
+    .product-main .product-art {
+      position: absolute;
+      right: 6%;
+      top: 3%;
+      width: 58%;
+      height: 57%;
+      opacity: .94;
+    }
+
+    .product-side {
+      display: grid;
+      grid-template-rows: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .product-side .card {
+      min-height: 241px;
+      padding: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+    }
+
+    .tag {
+      display: inline-flex;
+      width: fit-content;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(119,226,196,.25);
+      color: #aee9d9;
+      font-size: .74rem;
+      font-weight: 700;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      margin-bottom: 17px;
+    }
+
+    .product-main h3 { font-size: clamp(2.1rem, 4vw, 3.6rem); margin: 0 0 15px; max-width: 680px; }
+    .product-main p { max-width: 660px; }
+    .product-link { margin-top: 22px; color: var(--accent); font-weight: 700; display: inline-flex; gap: 8px; align-items: center; }
+
+    .capabilities {
+      display: grid;
+      grid-template-columns: .9fr 1.1fr;
+      gap: 56px;
+      align-items: start;
+    }
+
+    .sticky { position: sticky; top: 110px; }
+
+    .cap-list {
+      border-top: 1px solid var(--line);
+    }
+
+    .cap-item {
+      display: grid;
+      grid-template-columns: 48px 1fr;
+      gap: 20px;
+      padding: 27px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .cap-num {
+      color: var(--accent);
+      font-size: .79rem;
+      padding-top: 4px;
+    }
+
+    .cap-item h3 { margin: 0 0 9px; font-size: 1.17rem; }
+    .cap-item p { margin: 0; color: var(--muted); line-height: 1.65; }
+
+    .process {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      overflow: hidden;
+      background: rgba(255,255,255,.018);
+    }
+
+    .step {
+      padding: 29px;
+      min-height: 230px;
+      border-right: 1px solid var(--line);
+    }
+    .step:last-child { border-right: 0; }
+    .step b { display: block; color: var(--accent); font-size: .8rem; margin-bottom: 52px; }
+    .step h3 { margin: 0 0 10px; font-size: 1.14rem; }
+    .step p { margin: 0; color: var(--muted); line-height: 1.58; font-size: .9rem; }
+
+    .contact-wrap {
+      display: grid;
+      grid-template-columns: .85fr 1.15fr;
+      gap: 40px;
+      padding: 44px;
+      border-radius: 30px;
+      border: 1px solid var(--line);
+      background:
+        radial-gradient(circle at 12% 20%, rgba(119,226,196,.12), transparent 30%),
+        linear-gradient(145deg, rgba(16,35,55,.88), rgba(7,18,30,.92));
+      box-shadow: var(--shadow);
+    }
+
+    .contact-copy h2 { font-size: clamp(2.2rem, 5vw, 4.5rem); margin-bottom: 24px; }
+    .contact-copy p { color: var(--muted); line-height: 1.7; max-width: 470px; }
+    .contact-copy .mail { color: var(--accent); font-weight: 750; display: inline-block; margin-top: 23px; }
+
+    form {
+      display: grid;
+      gap: 13px;
+    }
+
+    input, textarea {
+      width: 100%;
+      color: var(--text);
+      border: 1px solid var(--line);
+      background: rgba(4,13,22,.7);
+      border-radius: 13px;
+      padding: 15px 16px;
+      outline: none;
+    }
+
+    input:focus, textarea:focus { border-color: rgba(119,226,196,.55); }
+    textarea { min-height: 150px; resize: vertical; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 13px; }
+    .form-note { color: #7f94a6; font-size: .76rem; margin: 0; }
+
+    footer {
+      padding: 33px 0 46px;
+      color: #8094a5;
+      font-size: .84rem;
+    }
+
+    .footer-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 22px;
+      flex-wrap: wrap;
+      border-top: 1px solid var(--line);
+      padding-top: 28px;
+    }
+
+    .mobile-menu { display: none; }
+
+    .reveal {
+      opacity: 0;
+      transform: translateY(18px);
+      transition: opacity .65s ease, transform .65s ease;
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-13px); }
+    }
+
+    @media (max-width: 920px) {
+      .navlinks { display: none; }
+      .mobile-menu { display: inline-flex; }
+      .hero { grid-template-columns: 1fr; padding-top: 60px; }
+      .hero-visual { min-height: 480px; }
+      .grid { grid-template-columns: 1fr; }
+      .product-grid, .capabilities, .contact-wrap { grid-template-columns: 1fr; }
+      .sticky { position: static; }
+      .process { grid-template-columns: 1fr 1fr; }
+      .step:nth-child(2) { border-right: 0; }
+      .step:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+    }
+
+    @media (max-width: 640px) {
+      .shell { width: min(calc(100% - 24px), var(--max)); }
+      .nav { height: 68px; }
+      .brand span:last-child { display: none; }
+      .nav-actions .btn { display: none; }
+      .hero { min-height: auto; padding: 52px 0 72px; gap: 20px; }
+      h1 { font-size: clamp(3rem, 16vw, 4.5rem); }
+      .hero-copy { font-size: 1rem; }
+      .hero-visual { min-height: 390px; }
+      .orbit { width: 350px; }
+      .metric { min-width: 135px; padding: 11px; }
+      .metric.one { right: 0; }
+      .metric.two { left: 0; bottom: 10%; }
+      .section { padding: 77px 0; }
+      .section-head { display: block; }
+      .section-intro { margin-top: 18px; }
+      .product-main { min-height: 520px; padding: 26px; }
+      .product-main .product-art { width: 86%; right: -5%; top: 3%; }
+      .process { grid-template-columns: 1fr; }
+      .step { border-right: 0; border-bottom: 1px solid var(--line); }
+      .step:last-child { border-bottom: 0; }
+      .contact-wrap { padding: 25px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <nav class="nav shell">
+      <a class="brand" href="#top" aria-label="Væringjar Engineering">
+        <span class="brand-mark">
+          <svg viewBox="0 0 32 32" fill="none" aria-hidden="true">
+            <path d="M7 7l9 18L25 7" stroke="#77e2c4" stroke-width="2.2"/>
+            <path d="M11 7h10" stroke="#76a9ff" stroke-width="2.2"/>
+          </svg>
+        </span>
+        <span>VÆRINGJAR ENGINEERING</span>
+      </a>
+      <div class="navlinks">
+        <a href="#products" data-i18n="navProducts">Products</a>
+        <a href="#services" data-i18n="navServices">Engineering</a>
+        <a href="#process" data-i18n="navProcess">Process</a>
+        <a href="#contact" data-i18n="navContact">Contact</a>
+      </div>
+      <div class="nav-actions">
+        <button class="lang" id="langBtn" aria-label="Switch language">UA</button>
+        <a class="btn btn-primary" href="#contact" data-i18n="navCta">Start a project</a>
+      </div>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero shell">
+      <div class="hero-content reveal">
+        <div class="eyebrow" data-i18n="heroEyebrow">Aerospace & Robotics Engineering</div>
+        <h1 data-i18n-html="heroTitle">Build small.<span>Think beyond.</span></h1>
+        <p class="hero-copy" data-i18n="heroCopy">
+          We develop compact aerospace platforms, experimental rocket systems, autonomous vehicles, robots, electronics and embedded software — from an early concept to a tested product.
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#products" data-i18n="heroPrimary">Explore solutions</a>
+          <a class="btn btn-secondary" href="#contact" data-i18n="heroSecondary">Discuss your mission</a>
+        </div>
+        <div class="trust-row">
+          <span data-i18n="trust1">Prototype to product</span>
+          <span data-i18n="trust2">Hardware + software</span>
+          <span data-i18n="trust3">Civil & research applications</span>
+        </div>
+      </div>
+
+      <div class="hero-visual reveal" aria-hidden="true">
+        <div class="orbit">
+          <div class="dot"></div>
+          <div class="craft">
+            <svg viewBox="0 0 520 520" fill="none">
+              <defs>
+                <linearGradient id="body" x1="198" y1="84" x2="330" y2="420" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#DBE8F3"/>
+                  <stop offset="1" stop-color="#7B91A4"/>
+                </linearGradient>
+                <linearGradient id="dark" x1="210" y1="144" x2="305" y2="373" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#12283B"/>
+                  <stop offset="1" stop-color="#08131F"/>
+                </linearGradient>
+              </defs>
+              <path d="M261 60C226 107 206 155 202 217L198 344L324 344L320 217C316 155 296 107 261 60Z" fill="url(#body)" stroke="#D5E6F2" stroke-opacity=".55"/>
+              <path d="M261 60C240 100 233 141 235 187L237 344H286L288 187C290 141 282 100 261 60Z" fill="url(#dark)"/>
+              <path d="M198 260L135 349L198 334V260Z" fill="#6B8397" stroke="#B8CBD9" stroke-opacity=".38"/>
+              <path d="M324 260L387 349L324 334V260Z" fill="#6B8397" stroke="#B8CBD9" stroke-opacity=".38"/>
+              <path d="M224 344L208 414L250 382L261 445L272 382L314 414L298 344H224Z" fill="#13283A"/>
+              <path d="M243 366L261 447L279 366" fill="#77E2C4" fill-opacity=".7"/>
+              <circle cx="261" cy="210" r="25" fill="#76A9FF" fill-opacity=".7" stroke="#BBD5FF"/>
+              <path d="M261 186V234M237 210H285" stroke="#DDEAFF" stroke-opacity=".5"/>
+            </svg>
+          </div>
+          <div class="metric one">
+            <strong data-i18n="metric1Value">Integrated R&D</strong>
+            <small data-i18n="metric1Label">mechanics · electronics · code</small>
+          </div>
+          <div class="metric two">
+            <strong data-i18n="metric2Value">Mission focused</strong>
+            <small data-i18n="metric2Label">built around measurable results</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="products">
+      <div class="section-head reveal">
+        <div>
+          <div class="eyebrow" data-i18n="productsEyebrow">Products & Platforms</div>
+          <h2 data-i18n="productsTitle">Compact systems for ambitious missions.</h2>
+        </div>
+        <p class="section-intro" data-i18n="productsIntro">
+          Modular platforms designed for research, testing, inspection, education and industrial automation.
+        </p>
+      </div>
+
+      <div class="product-grid">
+        <article class="card product-main reveal">
+          <svg class="product-art" viewBox="0 0 600 360" fill="none" aria-hidden="true">
+            <path d="M350 42C318 83 300 125 297 179L294 272H408L405 179C401 125 383 83 350 42Z" fill="#C8D8E5" fill-opacity=".13" stroke="#B9D0E2" stroke-opacity=".45"/>
+            <path d="M294 206L238 286L294 273V206ZM408 206L464 286L408 273V206Z" fill="#76A9FF" fill-opacity=".12" stroke="#76A9FF" stroke-opacity=".36"/>
+            <path d="M328 272L316 328L350 302L384 328L372 272" fill="#77E2C4" fill-opacity=".18" stroke="#77E2C4" stroke-opacity=".4"/>
+            <circle cx="350" cy="154" r="21" fill="#76A9FF" fill-opacity=".22" stroke="#A5C8FF"/>
+            <path d="M74 276C168 250 219 193 254 100" stroke="#77E2C4" stroke-opacity=".3" stroke-dasharray="8 9"/>
+            <circle cx="74" cy="276" r="4" fill="#77E2C4"/>
+          </svg>
+          <span class="tag" data-i18n="productTag1">Experimental aerospace</span>
+          <h3 data-i18n="productTitle1">Small flight and rocket platforms</h3>
+          <p data-i18n="productCopy1">Configurable research platforms with onboard control, telemetry, power systems, ground equipment and test support.</p>
+          <a class="product-link" href="#contact"><span data-i18n="productLink">Request a configuration</span> →</a>
+        </article>
+
+        <div class="product-side">
+          <article class="card reveal">
+            <span class="tag" data-i18n="productTag2">Autonomy</span>
+            <h3 data-i18n="productTitle2">Robotic systems</h3>
+            <p data-i18n="productCopy2">Mobile, inspection and special-purpose robots with custom mechanics, control electronics and perception software.</p>
+          </article>
+          <article class="card reveal">
+            <span class="tag" data-i18n="productTag3">Embedded technology</span>
+            <h3 data-i18n="productTitle3">Control & telemetry modules</h3>
+            <p data-i18n="productCopy3">Reusable electronics and firmware building blocks for vehicle control, data acquisition, communication and diagnostics.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="services">
+      <div class="capabilities">
+        <div class="sticky reveal">
+          <div class="eyebrow" data-i18n="servicesEyebrow">Engineering services</div>
+          <h2 data-i18n="servicesTitle">One team across the complete product.</h2>
+          <p class="section-intro" style="margin-top:22px" data-i18n="servicesIntro">
+            We combine systems thinking with practical prototyping and production preparation.
+          </p>
+        </div>
+
+        <div class="cap-list">
+          <article class="cap-item reveal">
+            <div class="cap-num">01</div>
+            <div>
+              <h3 data-i18n="service1Title">System architecture</h3>
+              <p data-i18n="service1Copy">Mission analysis, requirements, interfaces, safety constraints, subsystem definition and development planning.</p>
+            </div>
+          </article>
+          <article class="cap-item reveal">
+            <div class="cap-num">02</div>
+            <div>
+              <h3 data-i18n="service2Title">Mechanical & electronic design</h3>
+              <p data-i18n="service2Copy">Structures, enclosures, mechanisms, PCB design, power distribution, sensors, actuators and manufacturing documentation.</p>
+            </div>
+          </article>
+          <article class="cap-item reveal">
+            <div class="cap-num">03</div>
+            <div>
+              <h3 data-i18n="service3Title">Embedded & autonomy software</h3>
+              <p data-i18n="service3Copy">Real-time control, telemetry, diagnostics, computer vision, mission software, simulation and operator interfaces.</p>
+            </div>
+          </article>
+          <article class="cap-item reveal">
+            <div class="cap-num">04</div>
+            <div>
+              <h3 data-i18n="service4Title">Prototype, integration & test</h3>
+              <p data-i18n="service4Copy">Supplier coordination, assembly, bring-up, test rigs, verification, field trials and preparation for low-volume production.</p>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section shell" id="process">
+      <div class="section-head reveal">
+        <div>
+          <div class="eyebrow" data-i18n="processEyebrow">How we work</div>
+          <h2 data-i18n="processTitle">From mission idea to tested hardware.</h2>
+        </div>
+      </div>
+
+      <div class="process reveal">
+        <article class="step">
+          <b>01</b>
+          <h3 data-i18n="step1Title">Define</h3>
+          <p data-i18n="step1Copy">Clarify the mission, environment, measurable targets, constraints and commercial goal.</p>
+        </article>
+        <article class="step">
+          <b>02</b>
+          <h3 data-i18n="step2Title">Design</h3>
+          <p data-i18n="step2Copy">Create architecture, models, electronics, mechanics, software plan and a verified cost baseline.</p>
+        </article>
+        <article class="step">
+          <b>03</b>
+          <h3 data-i18n="step3Title">Build</h3>
+          <p data-i18n="step3Copy">Manufacture, assemble and integrate a functional prototype with transparent engineering documentation.</p>
+        </article>
+        <article class="step">
+          <b>04</b>
+          <h3 data-i18n="step4Title">Validate</h3>
+          <p data-i18n="step4Copy">Test performance, resolve risks and prepare the product for demonstration or low-volume manufacturing.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section shell" id="contact">
+      <div class="contact-wrap reveal">
+        <div class="contact-copy">
+          <div class="eyebrow" data-i18n="contactEyebrow">Start a conversation</div>
+          <h2 data-i18n="contactTitle">Have a mission in mind?</h2>
+          <p data-i18n="contactCopy">Describe the product, payload, environment or engineering challenge. We will propose the next practical step.</p>
+          <a class="mail" href="mailto:hello@vaeringjar.engineering">hello@vaeringjar.engineering</a>
+        </div>
+
+        <form id="contactForm">
+          <div class="form-row">
+            <input name="name" type="text" data-i18n-placeholder="formName" placeholder="Your name" required />
+            <input name="email" type="email" data-i18n-placeholder="formEmail" placeholder="Business email" required />
+          </div>
+          <input name="company" type="text" data-i18n-placeholder="formCompany" placeholder="Company / organization" />
+          <textarea name="message" data-i18n-placeholder="formMessage" placeholder="Tell us about the mission, timeline and expected result" required></textarea>
+          <button class="btn btn-primary" type="submit" data-i18n="formButton">Send project request</button>
+          <p class="form-note" id="formNote" data-i18n="formNote">Demo form. Connect it to your CRM, email service or backend before publication.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="shell footer-row">
+      <div>© <span id="year"></span> Væringjar Engineering</div>
+      <div data-i18n="footerText">Civil, research and industrial engineering systems.</div>
+    </div>
+  </footer>
+
+  <script>
+    const translations = {
+      en: {
+        navProducts:"Products", navServices:"Engineering", navProcess:"Process", navContact:"Contact", navCta:"Start a project",
+        heroEyebrow:"Aerospace & Robotics Engineering", heroTitle:"Build small.<span>Think beyond.</span>",
+        heroCopy:"We develop compact aerospace platforms, experimental rocket systems, autonomous vehicles, robots, electronics and embedded software — from an early concept to a tested product.",
+        heroPrimary:"Explore solutions", heroSecondary:"Discuss your mission",
+        trust1:"Prototype to product", trust2:"Hardware + software", trust3:"Civil & research applications",
+        metric1Value:"Integrated R&D", metric1Label:"mechanics · electronics · code",
+        metric2Value:"Mission focused", metric2Label:"built around measurable results",
+        productsEyebrow:"Products & Platforms", productsTitle:"Compact systems for ambitious missions.",
+        productsIntro:"Modular platforms designed for research, testing, inspection, education and industrial automation.",
+        productTag1:"Experimental aerospace", productTitle1:"Small flight and rocket platforms",
+        productCopy1:"Configurable research platforms with onboard control, telemetry, power systems, ground equipment and test support.",
+        productLink:"Request a configuration", productTag2:"Autonomy", productTitle2:"Robotic systems",
+        productCopy2:"Mobile, inspection and special-purpose robots with custom mechanics, control electronics and perception software.",
+        productTag3:"Embedded technology", productTitle3:"Control & telemetry modules",
+        productCopy3:"Reusable electronics and firmware building blocks for vehicle control, data acquisition, communication and diagnostics.",
+        servicesEyebrow:"Engineering services", servicesTitle:"One team across the complete product.",
+        servicesIntro:"We combine systems thinking with practical prototyping and production preparation.",
+        service1Title:"System architecture", service1Copy:"Mission analysis, requirements, interfaces, safety constraints, subsystem definition and development planning.",
+        service2Title:"Mechanical & electronic design", service2Copy:"Structures, enclosures, mechanisms, PCB design, power distribution, sensors, actuators and manufacturing documentation.",
+        service3Title:"Embedded & autonomy software", service3Copy:"Real-time control, telemetry, diagnostics, computer vision, mission software, simulation and operator interfaces.",
+        service4Title:"Prototype, integration & test", service4Copy:"Supplier coordination, assembly, bring-up, test rigs, verification, field trials and preparation for low-volume production.",
+        processEyebrow:"How we work", processTitle:"From mission idea to tested hardware.",
+        step1Title:"Define", step1Copy:"Clarify the mission, environment, measurable targets, constraints and commercial goal.",
+        step2Title:"Design", step2Copy:"Create architecture, models, electronics, mechanics, software plan and a verified cost baseline.",
+        step3Title:"Build", step3Copy:"Manufacture, assemble and integrate a functional prototype with transparent engineering documentation.",
+        step4Title:"Validate", step4Copy:"Test performance, resolve risks and prepare the product for demonstration or low-volume manufacturing.",
+        contactEyebrow:"Start a conversation", contactTitle:"Have a mission in mind?",
+        contactCopy:"Describe the product, payload, environment or engineering challenge. We will propose the next practical step.",
+        formName:"Your name", formEmail:"Business email", formCompany:"Company / organization",
+        formMessage:"Tell us about the mission, timeline and expected result", formButton:"Send project request",
+        formNote:"Demo form. Connect it to your CRM, email service or backend before publication.",
+        formSuccess:"Thank you. Your request has been prepared for submission.",
+        footerText:"Civil, research and industrial engineering systems."
+      },
+      uk: {
+        navProducts:"Продукти", navServices:"Розробка", navProcess:"Процес", navContact:"Контакти", navCta:"Обговорити проєкт",
+        heroEyebrow:"Аерокосмічна техніка та робототехніка", heroTitle:"Компактні системи.<span>Великі цілі.</span>",
+        heroCopy:"Розробляємо компактні літальні платформи, експериментальні ракетні системи, автономну техніку, роботів, електроніку та вбудоване ПЗ — від концепції до випробуваного продукту.",
+        heroPrimary:"Переглянути рішення", heroSecondary:"Обговорити задачу",
+        trust1:"Від прототипу до продукту", trust2:"Апаратна та програмна частини", trust3:"Цивільні й дослідницькі застосування",
+        metric1Value:"Комплексна розробка", metric1Label:"механіка · електроніка · код",
+        metric2Value:"Фокус на місії", metric2Label:"вимірюваний технічний результат",
+        productsEyebrow:"Продукти та платформи", productsTitle:"Компактні системи для амбітних задач.",
+        productsIntro:"Модульні платформи для досліджень, випробувань, інспекції, освіти та промислової автоматизації.",
+        productTag1:"Експериментальна аерокосмічна техніка", productTitle1:"Малі літальні та ракетні платформи",
+        productCopy1:"Конфігуровані дослідницькі платформи з бортовим керуванням, телеметрією, живленням, наземним обладнанням та підтримкою випробувань.",
+        productLink:"Запросити конфігурацію", productTag2:"Автономність", productTitle2:"Роботизовані системи",
+        productCopy2:"Мобільні, інспекційні та спеціалізовані роботи з власною механікою, електронікою керування та програмним сприйняттям.",
+        productTag3:"Вбудовані технології", productTitle3:"Модулі керування та телеметрії",
+        productCopy3:"Повторно використовувані електронні й програмні модулі для керування, збору даних, зв’язку та діагностики.",
+        servicesEyebrow:"Інженерні послуги", servicesTitle:"Одна команда для всього продукту.",
+        servicesIntro:"Поєднуємо системну інженерію, практичне прототипування та підготовку до виробництва.",
+        service1Title:"Системна архітектура", service1Copy:"Аналіз місії, вимоги, інтерфейси, обмеження безпеки, структура підсистем і план розробки.",
+        service2Title:"Механіка та електроніка", service2Copy:"Конструкції, корпуси, механізми, друковані плати, живлення, сенсори, приводи та виробнича документація.",
+        service3Title:"Вбудоване ПЗ та автономність", service3Copy:"Керування у реальному часі, телеметрія, діагностика, комп’ютерний зір, моделювання та операторські інтерфейси.",
+        service4Title:"Прототипування, інтеграція і тестування", service4Copy:"Робота з виробниками, складання, запуск, тестові стенди, верифікація, польові випробування та підготовка малої серії.",
+        processEyebrow:"Як ми працюємо", processTitle:"Від ідеї місії до випробуваного виробу.",
+        step1Title:"Формуємо задачу", step1Copy:"Уточнюємо місію, середовище, вимірювані цілі, обмеження та комерційний результат.",
+        step2Title:"Проєктуємо", step2Copy:"Створюємо архітектуру, моделі, електроніку, механіку, план ПЗ та обґрунтовану оцінку витрат.",
+        step3Title:"Виготовляємо", step3Copy:"Виробляємо, збираємо й інтегруємо функціональний прототип із прозорою інженерною документацією.",
+        step4Title:"Перевіряємо", step4Copy:"Тестуємо характеристики, закриваємо ризики та готуємо продукт до демонстрації або малої серії.",
+        contactEyebrow:"Почнімо розмову", contactTitle:"Маєте технічну задачу?",
+        contactCopy:"Опишіть продукт, корисне навантаження, середовище або інженерну проблему. Ми запропонуємо наступний практичний крок.",
+        formName:"Ваше ім’я", formEmail:"Робочий email", formCompany:"Компанія / організація",
+        formMessage:"Опишіть задачу, строки та очікуваний результат", formButton:"Надіслати запит",
+        formNote:"Демонстраційна форма. Перед публікацією під’єднайте CRM, поштовий сервіс або backend.",
+        formSuccess:"Дякуємо. Запит підготовлено до відправлення.",
+        footerText:"Цивільні, дослідницькі та промислові інженерні системи."
+      }
+    };
+
+    let language = "en";
+    const langBtn = document.getElementById("langBtn");
+
+    function applyLanguage(lang) {
+      language = lang;
+      document.documentElement.lang = lang === "uk" ? "uk" : "en";
+      document.querySelectorAll("[data-i18n]").forEach(el => {
+        const key = el.dataset.i18n;
+        if (translations[lang][key]) el.textContent = translations[lang][key];
+      });
+      document.querySelectorAll("[data-i18n-html]").forEach(el => {
+        const key = el.dataset.i18nHtml;
+        if (translations[lang][key]) el.innerHTML = translations[lang][key];
+      });
+      document.querySelectorAll("[data-i18n-placeholder]").forEach(el => {
+        const key = el.dataset.i18nPlaceholder;
+        if (translations[lang][key]) el.placeholder = translations[lang][key];
+      });
+      langBtn.textContent = lang === "en" ? "UA" : "EN";
+    }
+
+    langBtn.addEventListener("click", () => applyLanguage(language === "en" ? "uk" : "en"));
+
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    document.getElementById("contactForm").addEventListener("submit", (event) => {
+      event.preventDefault();
+      const note = document.getElementById("formNote");
+      note.textContent = translations[language].formSuccess;
+      event.target.reset();
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("visible");
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.12 });
+
+    document.querySelectorAll(".reveal").forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
